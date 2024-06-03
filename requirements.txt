@@ -1,7 +1,8 @@
 aiofiles==23.1.0
-aiogram==3.0.0b7
+aiogram
 aiogram-media-group==0.5.1
-aiohttp==3.8.4
+aiohttp
 aioschedule==0.5.2
 openai==0.27.4
-pydantic==1.10.7
+pydantic
+pydantic-settings
