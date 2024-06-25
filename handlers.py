@@ -29,8 +29,17 @@ async def add_op(message: Message):
     user_id = message.from_user.id
     db = DBManager(connection=sqlite3.connect('finance.db'))
 
-    db.create_table()
-    db.insert(user_id, message.date, 300, "st")
+    q = """
+            CREATE TABLE IF NOT EXISTS operations (
+            id INTEGER,
+            date TIMESTAMP,
+            operation REAL,
+            description TEXT
+            )
+        """
+
+    db.create_table(q)
+    db.insert("operations", user_id, message.date, 300, "st")
 
     db.close()
 
