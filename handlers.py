@@ -1,7 +1,9 @@
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, ReplyKeyboardRemove
-from keyboards import get_yes_no_kb
+from keyboards import get_yes_no_kb, menu_kb, operations_kb
+from dbmanager import *
+import datetime
 
 router = Router()
 
@@ -9,21 +11,29 @@ router = Router()
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     await message.answer(
-        "Вы довольны своей работой?",
-        reply_markup=get_yes_no_kb()
+        "Что теперь?",
+        reply_markup=menu_kb()
     )
 
 
-@router.message(F.text.lower() == "да")
-async def answer_yes(message: Message):
+@router.message(F.text.lower() == "операции")
+async def operation(message: Message):
     await message.answer(
-        "Это здорово!",
-        reply_markup=ReplyKeyboardRemove()
+        "Добавить или удалить?",
+        reply_markup=operations_kb()
     )
 
 
-@router.message(F.text.lower() == "нет")
-async def answer_no(message: Message):
+@router.message(F.text.lower() == "добавить")
+async def add_op(message: Message):
+    user_id = message.from_user.id
+    db = DBManager(connection=sqlite3.connect('finance.db'))
+
+    db.create_table()
+    db.insert(user_id, message.date, 300, "st")
+
+    db.close()
+
     await message.answer(
         "Жаль...",
         reply_markup=ReplyKeyboardRemove()
