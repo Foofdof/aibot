@@ -6,27 +6,33 @@ class DBManager:
         self._connection = connection
         self._cursor = self._connection.cursor()
 
-    def create_table(self) -> bool:
-        if not self._cursor.execute(
-                '''
-                CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY,
-                date TIMESTAMP,
-                operation REAL,
-                description TEXT
-                )
-                '''):
+    def create_table(self, query) -> bool:
+        try:
+            self._cursor.execute(
+                query
+            )
+            self._connection.commit()
+        except Exception as e:
+            print(e)
             return False
-        self._connection.commit()
+
         return True
 
-    def close(self):
-        self._cursor.close()
-        self._connection.close()
+    def close(self) -> bool:
+        try:
+            self._cursor.close()
+            self._connection.close()
+        except Exception as e:
+            print(e)
+            return False
+        return True
 
-    def insert(self, *args):
-        if self.create_table():
-            print(args)
-            self._cursor.execute('INSERT INTO users (id, date, operation, description) VALUES (?, ?, ?, ?)',
-                                 (args[0], args[1], args[2], args[3]))
+    def insert(self, table, *args) -> bool:
+        placeholders = ', '.join(['?'] * len(args))
+        query = f'INSERT INTO {table} VALUES ({placeholders})'
+        try:
+            self._cursor.execute(query, args)
             self._connection.commit()
+        except Exception as e:
+            print(e)
+        return True
