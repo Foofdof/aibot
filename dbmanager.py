@@ -6,8 +6,14 @@ class DBManager:
         self._connection = connection
         self._cursor = self._connection.cursor()
 
-    def create_table(self, query) -> bool:
+    def create_table(self, settings) -> bool:
         try:
+            table = list(settings.items())
+            table = table[1:]
+            fields = ','.join([f"{item[0]} {item[1]}" for item in table])
+            query = f"""
+                CREATE TABLE IF NOT EXISTS {table[0][1]} ({fields})
+            """
             self._cursor.execute(
                 query
             )
