@@ -1,20 +1,15 @@
+import sqlite3
+
 from aiogram import Router, F
 from aiogram.filters import Command
-from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message, ReplyKeyboardRemove
+
+from dbmanager import DBManager
 from keyboards import menu_kb, operations_kb
-from dbmanager import *
-from states import OperationSq, Statistics
+from states import OperationSq
 
-router = Router()
-
-
-@router.message(Command("start"))
-async def cmd_start(message: Message):
-    await message.answer(
-        "Что теперь?",
-        reply_markup=menu_kb()
-    )
+router = Router(name=__name__)
 
 
 @router.message(F.text.lower() == "операции")
