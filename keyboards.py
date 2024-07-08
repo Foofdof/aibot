@@ -24,3 +24,11 @@ def operations_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Удалить")
     kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)
+
+
+def statistics_kb() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardBuilder()
+    kb.button(text="График по времени")
+    kb.button(text="Статистические параметры")
+    kb.adjust(2)
+    return kb.as_markup(resize_keyboard=True)
