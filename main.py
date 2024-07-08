@@ -6,7 +6,7 @@ from aiogram.enums.parse_mode import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
 import config
-from handlers import router
+from routers import router
 
 
 async def main():
