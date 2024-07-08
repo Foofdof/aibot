@@ -9,11 +9,14 @@ class DBManager:
     def create_table(self, settings) -> bool:
         try:
             table = list(settings.items())
+            name = settings["name"]
             table = table[1:]
             fields = ','.join([f"{item[0]} {item[1]}" for item in table])
+
             query = f"""
-                CREATE TABLE IF NOT EXISTS {table[0][1]} ({fields})
+                CREATE TABLE IF NOT EXISTS {name} ({fields})
             """
+            print(query)
             self._cursor.execute(
                 query
             )
@@ -36,9 +39,21 @@ class DBManager:
     def insert(self, table, *args) -> bool:
         placeholders = ', '.join(['?'] * len(args))
         query = f'INSERT INTO {table} VALUES ({placeholders})'
+        print(query)
         try:
             self._cursor.execute(query, args)
             self._connection.commit()
         except Exception as e:
             print(e)
         return True
+
+    def select(self, table, key) -> tuple:
+        query = f'SELECT date, operation, description FROM {table} WHERE id = ?'
+        rows = tuple()
+        try:
+            self._cursor.execute(query, (key,))
+            rows = self._cursor.fetchall()
+        except Exception as e:
+            print(e)
+
+        return rows
