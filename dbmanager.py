@@ -47,11 +47,22 @@ class DBManager:
             print(e)
         return True
 
-    def select(self, table, key) -> tuple:
-        query = f'SELECT date, operation, description FROM {table} WHERE id = ?'
-        rows = tuple()
+    def select(self, table, **conditions) -> list[tuple]:
+        query = f'SELECT date, operation, description FROM {table} WHERE '
+        cond = []
+        args = ()
+        for key, value in conditions.items():
+            if len(value) > 1:
+                cond.append(f'{key} BETWEEN ? AND ? ')
+                args += value
+            else:
+                cond.append(f'{key} = ? ')
+                args += value
+
+        query += 'AND '.join(cond)
+        rows = []
         try:
-            self._cursor.execute(query, (key,))
+            self._cursor.execute(query, args)
             rows = self._cursor.fetchall()
         except Exception as e:
             print(e)
