@@ -10,5 +10,5 @@ class OperationSq(StatesGroup):
 
 class StatisticsSq(StatesGroup):
     statistics_chosen = State()
-    plot_by_time = State()
-    stat_indicators = State()
+    period_chosen = State()
+    data = State()
