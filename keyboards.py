@@ -32,3 +32,13 @@ def statistics_kb() -> ReplyKeyboardMarkup:
     kb.button(text="Статистические параметры")
     kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)
+
+
+def period_choose() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardBuilder()
+    kb.button(text="За день")
+    kb.button(text="За неделю")
+    kb.button(text="За месяц")
+    kb.button(text="За все время")
+    kb.adjust(2)
+    return kb.as_markup(resize_keyboard=True)
